@@ -4,7 +4,6 @@ import PokedexLogo from './assets/pokedex-logo.png'
 
 function App() {
   return (
-
     <div className="App">
       <div className='pokemon-logo-container'>
         <img src={PokedexLogo} alt="Pokedex Logo" className='pokedex-logo-img' />
