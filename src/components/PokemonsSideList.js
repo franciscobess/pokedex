@@ -1,38 +1,11 @@
 import React from 'react'
 
-function PokemonsSideList() {
+function PokemonsSideList({ pokemonName }) {
     return (
         <div className='pokemons-side-list-container'>
             <nav className='pokemons-side-list'>
                 <ul>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
-                    <li>Pokemon</li>
+                    <li>{pokemonName}</li>
                 </ul>
             </nav>
 
