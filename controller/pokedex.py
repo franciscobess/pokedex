@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import requests
+import sqlite3
 
 
 class Pokedex:
@@ -8,7 +11,7 @@ class Pokedex:
         self.data = []
 
     def get_pokemon_count(self):
-        self.response = requests.get(f'{self.pokeapi_url}/pokemon/?limit=1')
+        self.response = requests.get(f'{self.pokeapi_url}/pokemon-species/')
         self.response_json = self.response.json()
         self.pokemon_count = self.response_json.get('count')
 
@@ -57,7 +60,7 @@ class Pokedex:
 
         for desc in self.descriptions:
             if desc.get('language').get('name') == 'en':
-                return str(desc.get('flavor_text').encode('utf-8')).replace('\\n', ' ')
+                return self.clear_request_string(desc.get('flavor_text'))
 
     def get_pokemon_data(self, pokemon_name):
         self.response = requests.get(f'{self.pokeapi_url}/pokemon/{pokemon_name}/')
@@ -77,6 +80,38 @@ class Pokedex:
 
         return pokemon_info
 
+    def clear_request_string(self, string):
+        better_string = string.replace('\n', ' ').replace('', ' ')
+
+        return better_string
+
+    def populate_pokedex_database(self):
+        try:
+            pokemon_names = self.get_pokemon_names()
+            conn = sqlite3.connect('model/pokedex.db')
+            cursor = conn.cursor()
+
+            cursor.execute("DELETE FROM PokemonData")
+
+            for pokemon in pokemon_names:
+                pokemon_data = self.get_pokemon_data(pokemon)
+
+                print(f'{pokemon_data["id"]} - {pokemon_data["name"]}')
+                cursor.execute(f"""INSERT INTO PokemonData VALUES(
+                    {pokemon_data['id']}, 
+                    "{pokemon_data['name']}", 
+                    "{pokemon_data['description']}", 
+                    "{pokemon_data['types'][0]}",
+                    "{pokemon_data['types'][1] if len(pokemon_data['types']) > 1 else None}",
+                    "{pokemon_data['stats']}",
+                    "{pokemon_data['height']}",
+                    "{pokemon_data['weight']}",
+                    "{pokemon_data['sprite']}"
+                    )""")
+                conn.commit() # commit pokemon data into db after every iteration
+        finally:
+            conn.close()
+
 
 # pokedex = Pokedex()
-# print(pokedex.get_pokemon_data('bulbasaur'))
+# pokedex.populate_pokedex_database()
